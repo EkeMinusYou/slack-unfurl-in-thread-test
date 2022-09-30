@@ -61,10 +61,11 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	// reader := bytes.NewBuffer(img)
 	externalId := uuid.NewString()
 	remoteFile, err := client.AddRemoteFile(slack.RemoteFileParameters{
-		ExternalID:   "slack unfurl test: " + externalId,
-		ExternalURL:  "http://example.com",
-		Title:        "slack unfurl test",
-		PreviewImage: "41781157.jpeg",
+		ExternalID:            "slack unfurl test: " + externalId,
+		ExternalURL:           "https://example.com",
+		Title:                 "slack unfurl test",
+		IndexableFileContents: "search_terms.txt",
+		PreviewImage:          "41781157.jpeg",
 	})
 	if err != nil {
 		log.Printf("failed to add remote file. err=%s", err)

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -53,12 +54,18 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	img, err := os.ReadFile("generate_image.png")
+	if err != nil {
+		log.Printf("can not read image file. err=%s", err)
+		return
+	}
+	reader := bytes.NewBuffer(img)
 	externalId := uuid.NewString()
 	remoteFile, err := client.AddRemoteFile(slack.RemoteFileParameters{
-		ExternalID:  "slack unfurl test: " + externalId,
-		ExternalURL: "http://example.com",
-		Title:       "slack unfurl test",
-		// PreviewImage: "generate_image.png",
+		ExternalID:         "slack unfurl test: " + externalId,
+		ExternalURL:        "http://example.com",
+		Title:              "slack unfurl test",
+		PreviewImageReader: reader,
 	})
 	if err != nil {
 		log.Printf("failed to add remote file. err=%s", err)

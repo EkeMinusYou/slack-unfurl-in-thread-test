@@ -54,7 +54,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	img, err := os.ReadFile("generate_image.png")
+	img, err := os.ReadFile("41781157.jpeg")
 	if err != nil {
 		log.Printf("can not read image file. err=%s", err)
 		return
@@ -76,10 +76,6 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	blocks := make([]slack.Block, 0, 1)
 	blocks = append(blocks, slack.NewFileBlock("", remoteFile.ExternalID, "remote"))
 	link := linkSharedEvent.Links[0]
-	log.Println(linkSharedEvent.TimeStamp)
-	log.Println(linkSharedEvent.ThreadTimeStamp)
-	log.Println(linkSharedEvent.EventTimestamp)
-	log.Println(linkSharedEvent.MessageTimeStamp)
 	_, _, _, err = client.UnfurlMessage(
 		linkSharedEvent.Channel,
 		linkSharedEvent.MessageTimeStamp,

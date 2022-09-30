@@ -30,6 +30,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		log.Printf("failed to read request body: %s", err.Error())
 		return
 	}
+	log.Println(body)
+	log.Println(VerificationToken)
 	event, err := slackevents.ParseEvent(
 		json.RawMessage(body),
 		slackevents.OptionVerifyToken(&slackevents.TokenComparator{VerificationToken: VerificationToken}),

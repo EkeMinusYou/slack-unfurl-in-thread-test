@@ -69,9 +69,10 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	blocks := make([]slack.Block, 0, 1)
 	blocks = append(blocks, slack.NewFileBlock("", remoteFile.ExternalID, "remote"))
 	link := linkSharedEvent.Links[0]
+	log.Println(linkSharedEvent)
 	_, _, _, err = client.UnfurlMessage(
 		linkSharedEvent.Channel,
-		linkSharedEvent.TimeStamp,
+		linkSharedEvent.EventTimestamp,
 		map[string]slack.Attachment{
 			link.URL: {
 				Blocks: slack.Blocks{

@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -23,7 +23,7 @@ func init() {
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	client := slack.New(SlackToken, slack.OptionDebug(true))
-	body, err := ioutil.ReadAll(r.Body)
+	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		log.Printf("failed to read request body: %s", err.Error())
 		return
@@ -77,7 +77,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	link := linkSharedEvent.Links[0]
 	_, _, _, err = client.UnfurlMessage(
 		linkSharedEvent.Channel,
-		linkSharedEvent.MessageTimeStamp,
+		linkSharedEvent.MessageTimeStamp.String(),
 		map[string]slack.Attachment{
 			link.URL: {
 				Blocks: slack.Blocks{

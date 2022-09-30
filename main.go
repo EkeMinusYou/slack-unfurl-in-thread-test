@@ -27,19 +27,22 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	client := slack.New(SlackToken, slack.OptionDebug(true))
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		log.Fatalf("failed to read request body: %s", err.Error())
+		log.Printf("failed to read request body: %s", err.Error())
+		return
 	}
 	event, err := slackevents.ParseEvent(
 		json.RawMessage(body),
 		slackevents.OptionVerifyToken(&slackevents.TokenComparator{VerificationToken: VerificationToken}),
 	)
 	if err != nil {
-		log.Fatalf("failed to parse event: %s", err.Error())
+		log.Printf("failed to parse event: %s", err.Error())
+		return
 	}
 
 	linkSharedEvent, ok := event.InnerEvent.Data.(*slackevents.LinkSharedEvent)
 	if !ok {
-		log.Fatal("event is not LinkSharedEvent")
+		log.Printf("event is not LinkSharedEvent")
+		return
 	}
 	link := linkSharedEvent.Links[0]
 
@@ -51,7 +54,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		PreviewImage: "https://go.dev/images/gophers/ladder.svg",
 	})
 	if err != nil {
-		log.Fatalf("failed to add remote file. err=%s", err)
+		log.Printf("failed to add remote file. err=%s", err)
+		return
 	}
 	fmt.Println(remoteFile.ExternalID)
 
@@ -69,7 +73,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		},
 	)
 	if err != nil {
-		log.Fatalf("failed to unfurl remote file. URL=%s err=%s", link.URL, err)
+		log.Printf("failed to unfurl remote file. URL=%s err=%s", link.URL, err)
+		return
 	}
 
 	w.WriteHeader(http.StatusOK)

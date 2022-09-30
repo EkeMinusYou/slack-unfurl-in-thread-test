@@ -44,7 +44,13 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		log.Printf("event is not LinkSharedEvent")
 		return
 	}
-	link := linkSharedEvent.Links[0]
+
+	if event.Type == slackevents.URLVerification {
+		var r *slackevents.ChallengeResponse
+		json.Unmarshal([]byte(body), &r)
+		w.Header().Set("Content-Type", "text")
+		w.Write([]byte(r.Challenge))
+	}
 
 	externalId := uuid.NewString()
 	remoteFile, err := client.AddRemoteFile(slack.RemoteFileParameters{
@@ -61,6 +67,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 	blocks := make([]slack.Block, 0, 1)
 	blocks = append(blocks, slack.NewFileBlock("", remoteFile.ExternalID, "remote"))
+	link := linkSharedEvent.Links[0]
 	_, _, _, err = client.UnfurlMessage(
 		linkSharedEvent.Channel,
 		linkSharedEvent.TimeStamp,

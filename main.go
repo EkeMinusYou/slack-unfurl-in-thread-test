@@ -2,13 +2,11 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 
-	"github.com/google/uuid"
 	"github.com/slack-go/slack"
 	"github.com/slack-go/slack/slackevents"
 )
@@ -59,22 +57,23 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	// 	return
 	// }
 	// reader := bytes.NewBuffer(img)
-	externalId := uuid.NewString()
-	remoteFile, err := client.AddRemoteFile(slack.RemoteFileParameters{
-		ExternalID:            "slack unfurl test: " + externalId,
-		ExternalURL:           "https://example.com",
-		Title:                 "slack unfurl test",
-		IndexableFileContents: "search_terms.txt",
-		PreviewImage:          "41781157.jpeg",
-	})
-	if err != nil {
-		log.Printf("failed to add remote file. err=%s", err)
-		return
-	}
-	fmt.Println(remoteFile.ExternalID)
+	// externalId := uuid.NewString()
+	// remoteFile, err := client.AddRemoteFile(slack.RemoteFileParameters{
+	// 	ExternalID:            "slack unfurl test: " + externalId,
+	// 	ExternalURL:           "https://example.com",
+	// 	Title:                 "slack unfurl test",
+	// 	IndexableFileContents: "search_terms.txt",
+	// 	PreviewImage:          "41781157.jpeg",
+	// })
+	// if err != nil {
+	// 	log.Printf("failed to add remote file. err=%s", err)
+	// 	return
+	// }
+	// fmt.Println(remoteFile.ExternalID)
 
 	blocks := make([]slack.Block, 0, 1)
-	blocks = append(blocks, slack.NewFileBlock("", remoteFile.ExternalID, "remote"))
+	// blocks = append(blocks, slack.NewFileBlock("", remoteFile.ExternalID, "remote"))
+	blocks = append(blocks, slack.NewFileBlock("", "test-12345", "remote"))
 	link := linkSharedEvent.Links[0]
 	_, _, _, err = client.UnfurlMessage(
 		linkSharedEvent.Channel,

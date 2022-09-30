@@ -24,8 +24,6 @@ func init() {
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	log.Println(SlackToken)
-	log.Println(VerificationToken)
 	client := slack.New(SlackToken, slack.OptionDebug(true))
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -41,17 +39,18 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	linkSharedEvent, ok := event.InnerEvent.Data.(*slackevents.LinkSharedEvent)
-	if !ok {
-		log.Printf("event is not LinkSharedEvent")
-		return
-	}
-
 	if event.Type == slackevents.URLVerification {
 		var r *slackevents.ChallengeResponse
 		json.Unmarshal([]byte(body), &r)
 		w.Header().Set("Content-Type", "text")
 		w.Write([]byte(r.Challenge))
+		return
+	}
+
+	linkSharedEvent, ok := event.InnerEvent.Data.(*slackevents.LinkSharedEvent)
+	if !ok {
+		log.Printf("event is not LinkSharedEvent")
+		return
 	}
 
 	externalId := uuid.NewString()

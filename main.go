@@ -24,14 +24,14 @@ func init() {
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
+	log.Println(SlackToken)
+	log.Println(VerificationToken)
 	client := slack.New(SlackToken, slack.OptionDebug(true))
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		log.Printf("failed to read request body: %s", err.Error())
 		return
 	}
-	log.Println(body)
-	log.Println(VerificationToken)
 	event, err := slackevents.ParseEvent(
 		json.RawMessage(body),
 		slackevents.OptionVerifyToken(&slackevents.TokenComparator{VerificationToken: VerificationToken}),

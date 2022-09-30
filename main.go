@@ -58,7 +58,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		ExternalID:   "slack unfurl test: " + externalId,
 		ExternalURL:  "http://example.com",
 		Title:        "slack unfurl test",
-		PreviewImage: "https://go.dev/images/gophers/ladder.svg",
+		PreviewImage: "generate_image.png",
 	})
 	if err != nil {
 		log.Printf("failed to add remote file. err=%s", err)

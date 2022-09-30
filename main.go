@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/slack-go/slack"
 	"github.com/slack-go/slack/slackevents"
@@ -70,6 +71,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	// 	return
 	// }
 	// fmt.Println(remoteFile.ExternalID)
+	time.Sleep(5 * time.Second)
 
 	blocks := make([]slack.Block, 0, 1)
 	// blocks = append(blocks, slack.NewFileBlock("", remoteFile.ExternalID, "remote"))
